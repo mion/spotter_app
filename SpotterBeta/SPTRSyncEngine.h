@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SPTRViewController.h"
 
 @interface SPTRSyncEngine : NSObject
 
 + (SPTRSyncEngine *)sharedEngine;
-- (void)startSync;
+- (void)startSync:(SPTRViewController *)viewController;
 
 @property (atomic, readonly) BOOL syncInProgress;
 

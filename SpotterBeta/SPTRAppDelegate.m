@@ -7,13 +7,20 @@
 //
 
 #import "SPTRAppDelegate.h"
-#import "SPTRSyncEngine.h"
 
 @implementation SPTRAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    // First time launch?
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+    }
+    else{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+    }
+    
     return YES;
 }
 							
@@ -36,8 +43,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    NSLog(@"Sync started.");
-    [[SPTRSyncEngine sharedEngine] startSync];
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

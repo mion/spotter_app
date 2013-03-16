@@ -58,7 +58,7 @@ NSString * const kSPTRSyncEngineSyncCompletedNotificationName = @"SPTRSyncEngine
     SPTRGarage * garage = [[SPTRGarage alloc] init];
     FMDatabase * db = [SPTRDatabaseController sharedInstance].database; // TODO: Refactor (getDatabase ?)
     
-    NSLog(@"JSON: %@", responseObject);
+    NSLog(@"API - Response JSON: %@", responseObject);
     
     if ([responseArray count] == 0)
     {
@@ -149,7 +149,7 @@ NSString * const kSPTRSyncEngineSyncCompletedNotificationName = @"SPTRSyncEngine
     return date;
 }
 
-- (void)downloadData:(BOOL)useUpdatedAtDate
+- (void)downloadData:(BOOL)useUpdatedAtDate updateViewController:(SPTRViewController *)viewController
 {
     NSURLRequest *request = nil;
     NSString * mostRecentUpdatedDate = nil;
@@ -161,17 +161,26 @@ NSString * const kSPTRSyncEngineSyncCompletedNotificationName = @"SPTRSyncEngine
     
     request = [[SPTRAFSpotterAPIClient sharedClient] GETRequestForGaragesUpdatedAfterDate:mostRecentUpdatedDate];
     
-    AFHTTPRequestOperation *operation = [[SPTRAFSpotterAPIClient sharedClient] HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSLog(@"Response %@", responseObject);
-        [self writeJSONResponse:responseObject];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Request failed with error: %@", error);
-    }];
-    
-    [operation start];
+    if (viewController == NULL) { // REFACTOR? duplicated code
+        AFHTTPRequestOperation *operation = [[SPTRAFSpotterAPIClient sharedClient] HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self writeJSONResponse:responseObject];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Request failed with error: %@", error); // TODO: use service to log this error
+        }];
+        [operation start];
+    } else {        
+        AFHTTPRequestOperation *operation = [[SPTRAFSpotterAPIClient sharedClient] HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self writeJSONResponse:responseObject];
+            [viewController hideProgressHUD:YES];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [viewController hideProgressHUD:NO];
+            NSLog(@"Request failed with error: %@", error); // TODO: use service to log this error
+        }];
+        [operation start];
+    }
 }
 
-- (void)startSync
+- (void)startSync:(SPTRViewController *)viewController
 {
     if (!self.syncInProgress)
     {
@@ -179,7 +188,7 @@ NSString * const kSPTRSyncEngineSyncCompletedNotificationName = @"SPTRSyncEngine
         _syncInProgress = YES;
         [self didChangeValueForKey:@"syncInProgress"];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [self downloadData:YES];
+            [self downloadData:YES updateViewController:viewController];
         });
     }
 }

@@ -36,8 +36,8 @@ static NSString * const kSPTRDatabaseName = @"sptr";
         {
             BOOL success = [fileManager copyItemAtPath:defaultDBPath toPath:dbPath error:&error];
             
-            NSLog(@"defaultDBPath: %@", defaultDBPath);
-            NSLog(@"dbPath: %@", dbPath);
+            //NSLog(@"defaultDBPath: %@", defaultDBPath);
+            //NSLog(@"dbPath: %@", dbPath);
             
             if(!success){
                 NSLog(@"Failed to create writable database file with message '%@'.", [error localizedDescription]);

@@ -9,7 +9,7 @@
 #import "SPTRAFSpotterAPIClient.h"
 #import "AFJSONRequestOperation.h"
 
-static NSString * const kSPTRSpotterAPIBaseURLString = @"http://aqueous-citadel-6834.herokuapp.com/";
+static NSString * const kSPTRSpotterAPIBaseURLString = @"http://aqueous-citadel-6834.herokuapp.com";
 
 @implementation SPTRAFSpotterAPIClient
 
@@ -44,7 +44,7 @@ static NSString * const kSPTRSpotterAPIBaseURLString = @"http://aqueous-citadel-
     NSString * updatedAfter = updatedDate ? [NSString stringWithFormat:@"/?updated_after=%@", updatedDate] : @"" ;
     
     NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@/garages.json%@", kSPTRSpotterAPIBaseURLString, updatedAfter]];
-    NSLog(@"API Client url: %@", [NSString stringWithFormat:@"%@/garages.json%@", kSPTRSpotterAPIBaseURLString, updatedAfter]);
+    NSLog(@"API - Sending request to: %@", [NSString stringWithFormat:@"%@/garages.json%@", kSPTRSpotterAPIBaseURLString, updatedAfter]);
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     
     return request;

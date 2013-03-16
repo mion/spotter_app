@@ -1,1 +1,9 @@
-* Quando o app inicia pela primeira vez, ele baixa tudo mas não mostra (tem que reiniciar). Consertar isso!
+*   Quando o app inicia pela primeira vez (banco vazio), ele baixa tudo mas não mostra (tem que reiniciar).
+    Criar um caso especial para 1a vez: mostrar progress bar (o usuário tem que esperar). 
+    Nas outras vezes, ele simplesmente baixa as alterações e atualiza o mapa no background, sem o usuário saber.
+
+*   Adicionar algum serviço para enviar log de errors (talvez próprio Mixpanel..?)
+
+*   Adicionar metrics com Mixpanel
+
+*   Fazer uma Ruby gem que procura "TODO" nos arquivos fonte e joga num "todo.txt"

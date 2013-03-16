@@ -9,7 +9,7 @@
 #import "SPTRViewController.h"
 #import "SPTRDatabaseController.h"
 #import "SPTRGarage.h"
-#import "MBProgressHUD.h"
+#import "SPTRSyncEngine.h"
 
 #define METERS_PER_MILE 1609.344
 
@@ -19,6 +19,8 @@
 
 @implementation SPTRViewController
 
+@synthesize HUD;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -27,16 +29,24 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"Plotting garages...");
-    [self plotGarages];
-    
-    CLLocationCoordinate2D zoomLocation;
-    zoomLocation.latitude = -22.9858472;
-    zoomLocation.longitude = -43.2143279;
-    
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 0.5*METERS_PER_MILE, 0.5*METERS_PER_MILE);
-    
-    [_mapView setRegion:viewRegion animated:YES];
+    // Check for updates on the server.
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
+        // If it's the first time, show a progress bar.
+        NSLog(@"First time sync started!");
+        
+        HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        HUD.labelText = @"Por favor, aguarde...";
+        HUD.detailsLabelText = @"Atualizando estacionamentos";
+        HUD.square = YES;
+        
+        HUD.delegate = self;
+        
+        [[SPTRSyncEngine sharedEngine] startSync:self];
+    } else {
+        NSLog(@"Sync started.");
+        [[SPTRSyncEngine sharedEngine] startSync:NULL];
+        [self setupMapAndPlotGarages];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -45,8 +55,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)plotGarages
+- (void)setupMapAndPlotGarages
 {
+    NSLog(@"Plotting garages...");
+    CLLocationCoordinate2D zoomLocation;
+    zoomLocation.latitude = -22.9858472;
+    zoomLocation.longitude = -43.2143279;
+    
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 0.5*METERS_PER_MILE, 0.5*METERS_PER_MILE);
+    
+    [_mapView setRegion:viewRegion animated:YES];
+    
     for (id<MKAnnotation> annotation in _mapView.annotations) {
         [_mapView removeAnnotation:annotation];
     }
@@ -81,11 +100,26 @@
     return nil;
 }
 
-- (void) mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
     SPTRGarage *garage = (SPTRGarage *)view.annotation;
     
     NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
     [garage.mapItem openInMapsWithLaunchOptions:launchOptions];
+}
+
+- (void)hideProgressHUD:(BOOL)syncSuccessful {
+    [HUD hide:YES];
+    
+    if (!syncSuccessful) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sem conexão com a internet"
+                                                        message:@"Certifique-se de que você está conectado à internet e reinicie o aplicativo."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    } else {
+        [self setupMapAndPlotGarages];
+    }
 }
 
 @end
