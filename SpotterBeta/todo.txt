@@ -7,3 +7,7 @@
 *   Adicionar metrics com Mixpanel
 
 *   Fazer uma Ruby gem que procura "TODO" nos arquivos fonte e joga num "todo.txt"
+
+*   Cachear resultado de busca por endereço (limpar o cache quando o servidor for atualizado).
+
+*   Bookmark de endereços.

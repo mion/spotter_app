@@ -50,4 +50,19 @@ static NSString * const kSPTRSpotterAPIBaseURLString = @"http://aqueous-citadel-
     return request;
 }
 
+- (void)findGaragesNear:(NSString *)address within:(NSString *)miles
+                 withSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                     failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSURL *url = [[NSURL alloc] initWithString:[[NSString stringWithFormat:@"%@/garages.json?near=\"%@\"&miles=%@", kSPTRSpotterAPIBaseURLString, address, miles]
+                                                stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    
+    NSLog(@"API - Garages near URL: %@", [NSString stringWithFormat:@"%@/garages.json?near=\"%@\"&miles=%@", kSPTRSpotterAPIBaseURLString, address, miles]);
+    
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    
+    [operation start];
+}
+
 @end

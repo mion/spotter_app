@@ -12,10 +12,10 @@
 
 @interface SPTRViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, MBProgressHUDDelegate>
 
-- (void)hideProgressHUD:(BOOL)syncSuccessful;
+- (void)firstTimeSyncCompleted:(BOOL)syncSuccessful;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
+@property IBOutlet UISearchBar *addressSearchBar;
 @property (atomic, retain) MBProgressHUD *HUD;
 
 @end

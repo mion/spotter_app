@@ -77,7 +77,7 @@ NSString * const kSPTRSyncEngineSyncCompletedNotificationName = @"SPTRSyncEngine
     
     request = [[SPTRAFSpotterAPIClient sharedClient] GETRequestForGaragesUpdatedAfterDate:mostRecentUpdatedDate];
     
-    if (viewController == NULL) { // REFACTOR? duplicated code
+    if (viewController == NULL) { // REFACTOR: duplicated code, should network request code be here?
         AFHTTPRequestOperation *operation = [[SPTRAFSpotterAPIClient sharedClient] HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
             [self writeJSONResponse:responseObject];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -87,9 +87,9 @@ NSString * const kSPTRSyncEngineSyncCompletedNotificationName = @"SPTRSyncEngine
     } else {        
         AFHTTPRequestOperation *operation = [[SPTRAFSpotterAPIClient sharedClient] HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
             [self writeJSONResponse:responseObject];
-            [viewController hideProgressHUD:YES];
+            [viewController firstTimeSyncCompleted:YES];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [viewController hideProgressHUD:NO];
+            [viewController firstTimeSyncCompleted:NO];
             NSLog(@"Request failed with error: %@", error); // TODO: use service to log this error
         }];
         [operation start];

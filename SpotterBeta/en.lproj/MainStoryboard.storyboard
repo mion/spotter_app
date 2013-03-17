@@ -12,32 +12,52 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" placeholder="Buscar por endereço" translatesAutoresizingMaskIntoConstraints="NO" id="ui1-yF-Oeh">
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
-                            </searchBar>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dWo-SK-U8e">
                                 <connections>
                                     <outlet property="delegate" destination="2" id="Aar-pN-xgJ"/>
                                 </connections>
                             </mapView>
+                            <searchBar contentMode="redraw" placeholder="Buscar por endereço" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tFi-IQ-FTn">
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2" id="Nbp-ee-Qyi"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ui1-yF-Oeh" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="90x-cW-Taw"/>
-                            <constraint firstItem="ui1-yF-Oeh" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="9tU-XD-3x4"/>
+                            <constraint firstItem="tFi-IQ-FTn" firstAttribute="bottom" secondItem="dWo-SK-U8e" secondAttribute="top" type="default" id="SlI-bJ-vAm"/>
+                            <constraint firstItem="tFi-IQ-FTn" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="ZGx-uz-OnA"/>
                             <constraint firstItem="dWo-SK-U8e" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="ZwA-Xx-hiC"/>
                             <constraint firstItem="dWo-SK-U8e" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="fJ2-Y4-c7x"/>
-                            <constraint firstItem="ui1-yF-Oeh" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="fMq-PY-b2M"/>
                             <constraint firstItem="dWo-SK-U8e" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="sik-ys-HBV"/>
-                            <constraint firstItem="dWo-SK-U8e" firstAttribute="top" secondItem="ui1-yF-Oeh" secondAttribute="bottom" type="default" id="xjr-qR-M8b"/>
+                            <constraint firstItem="tFi-IQ-FTn" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="xFe-yp-dho"/>
+                            <constraint firstItem="tFi-IQ-FTn" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="xxD-o8-LO5"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addressSearchBar" destination="tFi-IQ-FTn" id="xRg-id-pDa"/>
                         <outlet property="mapView" destination="dWo-SK-U8e" id="alQ-C2-nZG"/>
-                        <outlet property="searchBar" destination="ui1-yF-Oeh" id="AbU-Sp-jtD"/>
+                        <outlet property="searchDisplayController" destination="exD-ov-iHx" id="vzH-7S-iYV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="10C-kP-jX5">
+                    <connections>
+                        <outlet property="delegate" destination="2" id="Ahg-J8-CVS"/>
+                        <outlet property="searchContentsController" destination="2" id="StI-rP-BD6"/>
+                        <outlet property="searchResultsDataSource" destination="2" id="Alv-m4-d3L"/>
+                        <outlet property="searchResultsDelegate" destination="2" id="tjX-J0-9eL"/>
+                    </connections>
+                </searchDisplayController>
+                <searchDisplayController id="exD-ov-iHx">
+                    <connections>
+                        <outlet property="delegate" destination="2" id="vw6-RM-e3C"/>
+                        <outlet property="searchContentsController" destination="2" id="uG7-iE-gDX"/>
+                        <outlet property="searchResultsDataSource" destination="2" id="YwO-1A-nBP"/>
+                        <outlet property="searchResultsDelegate" destination="2" id="q0Q-9l-gfV"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
         </scene>
     </scenes>
