@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDatabase.h"
+#import "FMDatabaseQueue.h"
 
 @interface SPTRDatabaseController : NSObject
 
 + (SPTRDatabaseController *)sharedInstance;
 - (NSMutableArray *)getAllGarages;
+- (void)saveResponseArray:(NSArray *)responseArray;
+- (NSString *)getMostRecentUpdatedAtDate;
 
-@property (strong) FMDatabase * database;
+@property (strong) FMDatabaseQueue * databaseQueue;
 
 @end

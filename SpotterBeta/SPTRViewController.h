@@ -10,11 +10,12 @@
 #import <MapKit/MapKit.h>
 #import "MBProgressHUD.h"
 
-@interface SPTRViewController : UIViewController <MKMapViewDelegate, MBProgressHUDDelegate>
+@interface SPTRViewController : UIViewController <MKMapViewDelegate, UISearchBarDelegate, MBProgressHUDDelegate>
 
 - (void)hideProgressHUD:(BOOL)syncSuccessful;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (atomic, retain) MBProgressHUD *HUD;
 
 @end

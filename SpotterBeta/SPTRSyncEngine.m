@@ -52,101 +52,17 @@ NSString * const kSPTRSyncEngineSyncCompletedNotificationName = @"SPTRSyncEngine
     });
 }
 
-- (void)writeJSONResponse:(id)responseObject
+- (void)writeJSONResponse:(id)responseObject // REFACTOR: put db code in the DatabaseController
 {
     NSArray * responseArray = responseObject;
-    SPTRGarage * garage = [[SPTRGarage alloc] init];
-    FMDatabase * db = [SPTRDatabaseController sharedInstance].database; // TODO: Refactor (getDatabase ?)
-    
     NSLog(@"API - Response JSON: %@", responseObject);
     
-    if ([responseArray count] == 0)
-    {
-        return;
-    }
-    
-    if (![db open])
-    {
-        // TODO: Handle error.
-        // Opening fails if there are insufficient resources or permissions to open and/or create the database.
-        NSLog(@"FMDB Error: unable to open database.");
-        return;
-    }
-    
-    for (uint i = 0; i < [responseArray count]; i++)
-    {
-        NSDictionary * response = [responseArray objectAtIndex:i];
-        
-        garage.primaryKey = response[@"id"];
-        
-        garage.address = response[@"address"];
-        garage.created_at = response[@"created_at"];
-        garage.updated_at = response[@"updated_at"];
-        
-        garage.latitude = response[@"latitude"];
-        garage.longitude = response[@"longitude"];
-        garage.name = response[@"name"];
-        garage.opening = response[@"opening"];
-        garage.phone = response[@"phone"];
-        
-        if (![db executeUpdate:@"INSERT INTO garage VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-              garage.address,
-              garage.created_at,
-              garage.updated_at,
-              garage.primaryKey,
-              garage.latitude,
-              garage.longitude,
-              garage.name,
-              garage.opening,
-              garage.phone])
-        {
-            // TODO: Handle error.
-            NSLog(@"FMDB Error: unable to execute update.");
-            NSLog(@"Error %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-            [db close];
-            return;
-        }
-    }
-    
-    [db close];
-    
-    NSLog(@"Response saved to database!");
+    [[SPTRDatabaseController sharedInstance] saveResponseArray:responseArray];
 }
 
 - (NSString *)mostRecentUpdatedAtDate
 {
-    NSString * date = nil;
-    FMDatabase * db = [SPTRDatabaseController sharedInstance].database; // TODO: Refactor (getDatabase ?)
-    FMResultSet * s;
-    
-    if (![db open])
-    {
-        // TODO: Handle error.
-        // Opening fails if there are insufficient resources or permissions to open and/or create the database.
-        NSLog(@"FMDB Error: unable to open database.");
-        return nil;
-    }
-    
-    s = [db executeQuery:@"SELECT updated_at FROM garage ORDER BY julianday(updated_at) DESC;"];
-    
-    if (!s)
-    {
-        // TODO: Handle error.
-        NSLog(@"FMDB Error: unable to execute query.");
-        NSLog(@"Error %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db close];
-        return nil;
-    }
-    
-    if ([s next])
-    {
-        date = [s stringForColumn:@"updated_at"];
-        NSLog(@"Most recent updated: %@", [s stringForColumn:@"updated_at"]);
-    }
-    
-    [db close];
-    
-    return date;
+    return [[SPTRDatabaseController sharedInstance] getMostRecentUpdatedAtDate];
 }
 
 - (void)downloadData:(BOOL)useUpdatedAtDate updateViewController:(SPTRViewController *)viewController

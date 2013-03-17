@@ -20,6 +20,7 @@
 @implementation SPTRViewController
 
 @synthesize HUD;
+@synthesize searchBar;
 
 - (void)viewDidLoad
 {
@@ -105,6 +106,11 @@
     
     NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
     [garage.mapItem openInMapsWithLaunchOptions:launchOptions];
+}
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
+    NSLog(@"Searching address: %@", [theSearchBar text]);
+    [theSearchBar resignFirstResponder];
 }
 
 - (void)hideProgressHUD:(BOOL)syncSuccessful {
