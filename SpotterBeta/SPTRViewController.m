@@ -8,9 +8,9 @@
 
 #import "SPTRViewController.h"
 #import "SPTRDatabaseController.h"
-#import "SPTRGarage.h"
 #import "SPTRSyncEngine.h"
 #import "SPTRAFSpotterAPIClient.h"
+#import "SPTRGarageViewController.h"
 
 #define METERS_PER_MILE 1609.344
 
@@ -20,6 +20,7 @@
 
 @implementation SPTRViewController
 
+@synthesize segueGarage;
 @synthesize addressSearchBar;
 @synthesize HUD;
 
@@ -27,11 +28,19 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    locationManager = [[CLLocationManager alloc] init];
+    
+    [locationManager setDelegate:self];
+    
+    [locationManager setDistanceFilter:kCLDistanceFilterNone];
+    [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    // Check for updates on the server.
+    [addressSearchBar setHidden:YES];
+    
+    // TODO: PUT HIS SOMEWHERE ELSE!
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
         // If it's the first time, show a progress bar.
         NSLog(@"First time sync started!");
@@ -56,13 +65,16 @@
 - (void)setupMapAndPlotGarages
 {
     NSLog(@"Plotting garages...");
-    CLLocationCoordinate2D zoomLocation; // TODO: show current location
-    zoomLocation.latitude = -22.9858472;
-    zoomLocation.longitude = -43.2143279;
+    //CLLocationCoordinate2D zoomLocation; // TODO: show current location
+    //zoomLocation.latitude = -22.9858472;
+    //zoomLocation.longitude = -43.2143279;
     
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 0.5*METERS_PER_MILE, 0.5*METERS_PER_MILE);
+    //MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 0.5*METERS_PER_MILE, 0.5*METERS_PER_MILE);
     
-    [_mapView setRegion:viewRegion animated:YES];
+    //[_mapView setRegion:viewRegion animated:YES];
+    
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(locationManager.location.coordinate, 1000, 1000);
+    [_mapView setRegion:region animated:YES];
     
     for (id<MKAnnotation> annotation in _mapView.annotations) {
         [_mapView removeAnnotation:annotation];
@@ -99,10 +111,14 @@
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
-    SPTRGarage *garage = (SPTRGarage *)view.annotation;
+    //SPTRGarage *garage = (SPTRGarage *)view.annotation;
     
-    NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
-    [garage.mapItem openInMapsWithLaunchOptions:launchOptions];
+    //NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+    //[garage.mapItem openInMapsWithLaunchOptions:launchOptions];
+    segueGarage = (SPTRGarage *)view.annotation;
+    
+    self.navigationController.navigationBarHidden = NO;
+    [self performSegueWithIdentifier:@"GarageSegue" sender:self];
 }
 
 -(void)updateMapViewAfterAddressSearchWithResults:(NSArray *)response
@@ -173,6 +189,16 @@
     }];
 }
 
+- (IBAction)searchBarButtonClicked:(id)sender {
+    if ([addressSearchBar isHidden]) {
+        [addressSearchBar becomeFirstResponder];
+        [addressSearchBar setHidden:NO];
+    } else {
+        [addressSearchBar resignFirstResponder];
+        [addressSearchBar setHidden:YES];
+    }
+}
+
 # pragma mark - ProgressHUD
 - (void)firstTimeSyncCompleted:(BOOL)syncSuccessful
 {
@@ -199,6 +225,14 @@
     HUD.square = YES;
     
     HUD.delegate = self;
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([segue.identifier isEqualToString:@"GarageSegue"]) {
+        SPTRGarageViewController *garageVC = (SPTRGarageViewController *)segue.destinationViewController;
+        garageVC.garage = segueGarage;
+    }
 }
 
 @end

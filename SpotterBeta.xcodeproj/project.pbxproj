@@ -42,6 +42,8 @@
 		48994CF716B24EA20095A1C3 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48994CF516B24EA20095A1C3 /* MainStoryboard.storyboard */; };
 		48994CFA16B24EA20095A1C3 /* SPTRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48994CF916B24EA20095A1C3 /* SPTRViewController.m */; };
 		48994D0116B24F460095A1C3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48994D0016B24F460095A1C3 /* MapKit.framework */; };
+		48B5F6AB16F68D0200D3C2C5 /* SPTRGarageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48B5F6AA16F68D0200D3C2C5 /* SPTRGarageViewController.m */; };
+		48B5F6AD16F6BD9900D3C2C5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48B5F6AC16F6BD9900D3C2C5 /* CoreLocation.framework */; };
 		48E517BA16BB5E5100BC2F2E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48E517B916BB5E5100BC2F2E /* AddressBook.framework */; };
 /* End PBXBuildFile section */
 
@@ -106,6 +108,9 @@
 		48994CF816B24EA20095A1C3 /* SPTRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPTRViewController.h; sourceTree = "<group>"; };
 		48994CF916B24EA20095A1C3 /* SPTRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPTRViewController.m; sourceTree = "<group>"; };
 		48994D0016B24F460095A1C3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		48B5F6A916F68D0200D3C2C5 /* SPTRGarageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPTRGarageViewController.h; sourceTree = "<group>"; };
+		48B5F6AA16F68D0200D3C2C5 /* SPTRGarageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPTRGarageViewController.m; sourceTree = "<group>"; };
+		48B5F6AC16F6BD9900D3C2C5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		48E517B916BB5E5100BC2F2E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -114,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48B5F6AD16F6BD9900D3C2C5 /* CoreLocation.framework in Frameworks */,
 				48E517BA16BB5E5100BC2F2E /* AddressBook.framework in Frameworks */,
 				489831B816B98F140028CCEE /* libsqlite3.dylib in Frameworks */,
 				48994D0116B24F460095A1C3 /* MapKit.framework in Frameworks */,
@@ -183,6 +189,7 @@
 		48994CCE16B24EA20095A1C3 = {
 			isa = PBXGroup;
 			children = (
+				48B5F6AC16F6BD9900D3C2C5 /* CoreLocation.framework */,
 				48E517B916BB5E5100BC2F2E /* AddressBook.framework */,
 				489831B716B98F140028CCEE /* libsqlite3.dylib */,
 				48994D0016B24F460095A1C3 /* MapKit.framework */,
@@ -221,6 +228,8 @@
 				48994CF516B24EA20095A1C3 /* MainStoryboard.storyboard */,
 				48994CF816B24EA20095A1C3 /* SPTRViewController.h */,
 				48994CF916B24EA20095A1C3 /* SPTRViewController.m */,
+				48B5F6A916F68D0200D3C2C5 /* SPTRGarageViewController.h */,
+				48B5F6AA16F68D0200D3C2C5 /* SPTRGarageViewController.m */,
 				4898319F16B919A10028CCEE /* SPTRAFSpotterAPIClient.h */,
 				489831A016B919A10028CCEE /* SPTRAFSpotterAPIClient.m */,
 				489831B416B91FEA0028CCEE /* SPTRSyncEngine.h */,
@@ -343,6 +352,7 @@
 				489831BB16B9B3740028CCEE /* SPTRDatabaseController.m in Sources */,
 				489831C216BA064D0028CCEE /* SPTRGarage.m in Sources */,
 				48303EBD16F4ED1B0056BAD2 /* MBProgressHUD.m in Sources */,
+				48B5F6AB16F68D0200D3C2C5 /* SPTRGarageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
